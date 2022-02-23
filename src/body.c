@@ -1,6 +1,7 @@
 #include "include/body.h"
 #include <maths.h>
-
+#include <sprite_eng.h>
+#include <genesis.h>
 
 Body Body_init(f16 positionX, f16 positionY)
 {
@@ -10,14 +11,26 @@ Body Body_init(f16 positionX, f16 positionY)
     c.speedY = FIX16(0.0);
     c.positionX = positionX;
     c.positionY = positionY;
-    c.fragility = FIX16(1.0);
     
     return c;
 }
 
 
-void  Body_addVelocidade(Body *c, f16 speedX, f16 speedY)
+void  Body_addSpeed(Body *c, f16 speedX, f16 speedY, f16 fragility)
 {
-    c->speedX += fix16Mul(speedX, c->fragility);
-    c->speedY += fix16Mul(speedY, c->fragility);;
+
+    KLog_f2("speedX_old ", speedX, " speedY_old ", speedY);
+    c->speedX += fix16Mul(speedX, fragility);
+    c->speedY += fix16Mul(speedY, fragility);
+    KLog_f2("speedX_new ",  c->speedX, " speedY_new ", c->speedY);
+}
+
+void  Body_getPositionX(Body *c)
+{
+    return fix16ToInt(c->positionX) - c->axisX; 
+}
+
+void  Body_getPositionY(Body *c)
+{
+    return fix16ToInt(c->positionY) - c->axisY; 
 }
