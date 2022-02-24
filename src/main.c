@@ -2,6 +2,7 @@
 #include <genesis.h>
 #include "include/world.h"
 #include "characters.h"
+#include "include/global_var.h"
 
 
 Character c;
@@ -22,6 +23,7 @@ void print_hitbox(Sprite *t)
 #define GRAVITY FIX16(1.1)
 #define GROUND FIX16(150.0)
 
+bool stop = FALSE;
 
 void moveSprite( Character *c)
 {
@@ -36,12 +38,17 @@ void moveSprite( Character *c)
     {
         c->body.speedY += GRAVITY;
     }
-    if(c->body.positionY >= GROUND)
+    if(c->body.positionY >= GROUND) // modify to check ground of map
     {
         c->body.speedY = 0;
+        c->body.speedX = 0;
+        stop = TRUE;
+        SPR_setPosition(c->body.sprite, Body_getPositionX(c->body), fix16ToInt(GROUND));
+        SPR_setAnim(c->body.sprite, 1);
+        return;
     }
-
-    SPR_setPosition(c->body.sprite, fix16ToInt(c->body.positionX),fix16ToInt(c->body.positionY));
+    KLog_U2("x ", Body_getPositionX(c->body), " y ",  Body_getPositionY(c->body));
+    SPR_setPosition(c->body.sprite, Body_getPositionX(c->body),Body_getPositionY(c->body));
 }
 
 
@@ -66,28 +73,33 @@ int main()
     c.fragility = FIX16(1.5);
     c.atack.damage =  FIX16(0.5);
     c.atack.effects = NONE;
-    c.atack.scale = FALSE;
-    c.atack.speedX = FIX16(0.0);
+    c.atack.scale = TRUE;
+    c.atack.speedX = FIX16(0.5);
     c.atack.speedY = FIX16(-10.0);
     c.body.positionX = FIX16(25.0);
     c.body.positionY = FIX16(150.0);
     c.body.speedX = FIX16(0.0);
     c.body.speedY = FIX16(0.0);
+    c.body.axisX = 0;
+    c.body.axisY = 0;
 
-
-    c.body.sprite = SPR_addSprite(&Sonic,  fix16ToInt(c.body.positionX) , fix16ToInt(c.body.positionY), TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
+    c.body.sprite = SPR_addSprite(&Sonic,  Body_getPositionX(c.body) , Body_getPositionY(c.body), TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
     PAL_setPalette(PAL3, Sonic.palette->data, DMA);
     u8 x = 0, i =0;
 
-    Atack_interaction(&c.body, c.atack,c.fragility);
+    Atack_interaction(&c.body, c.atack, c.fragility);
+    SPR_setAnim(c.body.sprite,7);
     
 
 
     while(1)
     {
         
-
-        moveSprite(&c);
+        if(!stop)
+        {
+            moveSprite(&c);
+        }
+        frames++;
         SPR_update();         
         SYS_doVBlankProcess();
     }

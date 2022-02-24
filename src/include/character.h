@@ -13,11 +13,42 @@ typedef enum{
     NUMBER_OF_CHARACTERS,
 }CharName;
 
-typedef struct {
-	u16 state;              //state of character
+typedef enum{
+	IDLE,
+	WALKING,
+	JUMPING,
+	JUMPING_BACK,
+	JUMPING_DOWN,
+	FALLING_JUMP,
+	FALLING_DAMAGE,
+	COUNCH,
+	DASH,
+	GRAP_STAGE,
+	DODGE,
+	ATACK_WEAK,
+	ATACK_STRONG,
+	ATACK_UPER,
+	ATACK_LOWER,
+	ATACK_DASH,
+	ATACK_STRONG_FORWARD,
+	ATACK_STRONG_UP,
+	ATACK_STRONG_DOWN,
+	GRAB,
+	SPECIAL,
+	SPECIAL_UP,
+	ESPECIAL_DOWN,
+	DAMAGE_GROUND,
+	DAMAGE_AIR,
+	DAMAGE_FLY,
+	GET_UP,
+	WIN,
+	LOSE,
+    NUMBER_OF_STATES,
+}CharState;
 
-	u8  attackButton;       //Utilizado para verificar o comando das magias -> LP, MP, HK, LK, MK, HK
+typedef struct {
 	CharName  id;           //Identificacao numerica do personagem selecionado. Exemplo: Ryu=1; Ken=2; etc...
+	CharState state;        //state of character
 
     Body body;              // body of character
     Body spell;             // body of spell
