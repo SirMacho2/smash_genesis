@@ -3,9 +3,10 @@
 #include "include/world.h"
 #include "characters.h"
 #include "include/global_var.h"
+#include "include/joy_handler.h"
 
 
-Character c;
+Character c, c2;
 
 void print_hitbox(Sprite *t)
 {
@@ -43,11 +44,9 @@ void moveSprite( Character *c)
         c->body.speedY = 0;
         c->body.speedX = 0;
         stop = TRUE;
-        SPR_setPosition(c->body.sprite, Body_getPositionX(c->body), fix16ToInt(GROUND));
-        SPR_setAnim(c->body.sprite, 1);
+        SPR_setPosition(c->body.sprite, Body_getPositionX(c->body), fix16ToInt(GROUND) - c->body.axisY);
         return;
     }
-    KLog_U2("x ", Body_getPositionX(c->body), " y ",  Body_getPositionY(c->body));
     SPR_setPosition(c->body.sprite, Body_getPositionX(c->body),Body_getPositionY(c->body));
 }
 
@@ -66,6 +65,8 @@ int main()
     VDP_setBackgroundColor(0);     //Range 0-63 //4 Paletas de 16 cores = 64 cores
 	SYS_enableInts();
 
+    joyinit();
+
 
     VDP_drawText("Smash genesis!", 10,13);
 
@@ -81,25 +82,65 @@ int main()
     c.body.speedX = FIX16(0.0);
     c.body.speedY = FIX16(0.0);
     c.body.axisX = 0;
-    c.body.axisY = 0;
+    c.body.axisY = -8;
+    c.body.direction = 1;
+
+
 
     c.body.sprite = SPR_addSprite(&Sonic,  Body_getPositionX(c.body) , Body_getPositionY(c.body), TILE_ATTR(PAL3, FALSE, FALSE, FALSE));
     PAL_setPalette(PAL3, Sonic.palette->data, DMA);
     u8 x = 0, i =0;
 
-    Atack_interaction(&c.body, c.atack, c.fragility);
+    c2.body.sprite = SPR_addSprite(&Arale,  40 , fix16ToInt(GROUND), TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    PAL_setPalette(PAL2, Arale.palette->data, DMA);
+
+    // Atack_interaction(&c.body, c.atack, c.fragility);
     SPR_setAnim(c.body.sprite,7);
+    JOY_setEventHandler(joyHandlerCallback);
     
 
 
     while(1)
     {
-        
-        if(!stop)
+
+        if(joysticks[0].actualArrow == BUTTON_RIGHT)
         {
-            moveSprite(&c);
+            if(joysticks[0].doubleArrow == TRUE)
+            {
+                c.body.speedX = FIX16(3.0);
+                SPR_setAnim(c.body.sprite,3);
+            }
+            else
+            {
+                c.body.speedX = FIX16(1.0);
+                SPR_setAnim(c.body.sprite,2);
+            }
+            c.body.direction = 1;
+            SPR_setHFlip(c.body.sprite, FALSE);
+            
         }
+        else if(joysticks[0].actualArrow == BUTTON_LEFT)
+        {
+            if(joysticks[0].doubleArrow == TRUE)
+            {
+                c.body.speedX = FIX16(-3.0);
+                SPR_setAnim(c.body.sprite,3);
+            }
+            else
+            {
+                c.body.speedX = FIX16(-1.0);
+                SPR_setAnim(c.body.sprite,2);
+            }
+            c.body.direction = -1;
+            SPR_setHFlip(c.body.sprite, TRUE);
+        }
+        else
+        {
+            SPR_setAnim(c.body.sprite,0);
+        }
+
         frames++;
+        moveSprite(&c);
         SPR_update();         
         SYS_doVBlankProcess();
     }

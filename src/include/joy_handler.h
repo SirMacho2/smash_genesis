@@ -8,11 +8,18 @@
 
 typedef struct 
 {
-    u8 lastArrow;
-    u32 lastArrowTime;
+    u16 actualArrow;
+    u16 lastArrow;
+    u16 lastArrowPressTime;
+    u16 lastArrowReleaseTime;
     bool doubleArrow;
-    u8 actualKey;
-    u32 lastKeyTime;
+    u16 actualKey;
+    u16 lastKeyPressTime;
+    u16 lastKeyReleaseTime;
 }JoyHandler;
+
+void joyinit();
+void joyHandlerCallback(u16 joy, u16 changed, u16 state);
+
 
 #endif

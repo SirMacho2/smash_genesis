@@ -6,8 +6,8 @@
 
 void  Body_setSpeed(Body *c, f16 speedX, f16 speedY, f16 fragility)
 {
-    c->speedX += fix16Mul(speedX, fragility);
-    c->speedY += fix16Mul(speedY, fragility);
+    c->speedX = fix16Mul(speedX, fragility);
+    c->speedY = fix16Mul(speedY, fragility);
 }
 
 s16  Body_getPositionX(Body c)
