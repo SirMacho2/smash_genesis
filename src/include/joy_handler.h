@@ -8,14 +8,15 @@
 
 typedef struct 
 {
-    u16 actualArrow;
-    u16 lastArrow;
-    u16 lastArrowPressTime;
-    u16 lastArrowReleaseTime;
-    bool doubleArrow;
-    u16 actualKey;
-    u16 lastKeyPressTime;
-    u16 lastKeyReleaseTime;
+    u16 actualArrow;                //actual arrow key pressed
+    u16 lastArrow;                  //last arrow key pressed
+    u16 lastArrowPressTime;         //time when arrow key was pressed
+    u16 lastArrowReleaseTime;       //time when arrow key was released
+    bool doubleArrowX;              //is true when arrow key is pressed two times fast
+    bool doubleArrowY;              //is true when arrow key is pressed two times fast
+    u16 actualKey;                  //actual key pressed 
+    u16 lastKeyPressTime;           //time when key was pressed
+    u16 lastKeyReleaseTime;         //time when key was released
 }JoyHandler;
 
 void joyinit();

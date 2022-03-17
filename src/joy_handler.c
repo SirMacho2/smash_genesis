@@ -13,30 +13,28 @@ void joyinit()
         joysticks[i].lastKeyReleaseTime = 0;
         joysticks[i].lastArrowPressTime = 0;
         joysticks[i].lastArrowReleaseTime = 0;
-        joysticks[i].doubleArrow = 0;
+        joysticks[i].doubleArrowX = 0;
+        joysticks[i].doubleArrowY = 0;
     }
 }
 
 void joyHandlerCallback(u16 joy, u16 changed, u16 state)
 {
-	if (joy < JOY_5)
+	if (joy < JOY_5) //only detects comands from joystick 1-4
 	{
-		// detecta botão A pressionado
         if (changed & BUTTON_A)
         {
             if(state & BUTTON_A )
             {
-                joysticks[joy].actualKey |= BUTTON_A;
+                joysticks[joy].actualKey |= BUTTON_A;     
                 joysticks[joy].lastKeyPressTime = frames;
             }
-            // botão A solto
             else
             {
                 joysticks[joy].lastKeyReleaseTime = frames;
                 joysticks[joy].actualKey &= ~BUTTON_A;
             }
         }
-        // detecta botão B pressionado
         if (changed & BUTTON_B)
         {
             if(state & BUTTON_B )
@@ -44,14 +42,12 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                 joysticks[joy].actualKey |= BUTTON_B;
                 joysticks[joy].lastKeyPressTime = frames;
             }
-            // botão B solto
             else
             {
                 joysticks[joy].lastKeyReleaseTime = frames;
                 joysticks[joy].actualKey &= ~BUTTON_B;
             }
         }
-        // detecta botão C pressionado
         if (changed & BUTTON_C)
         {
             if(state & BUTTON_C )
@@ -59,7 +55,6 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                 joysticks[joy].actualKey |= BUTTON_C;
                 joysticks[joy].lastKeyPressTime = frames;
             }
-            // botão C solto
             else
             {
                 joysticks[joy].lastKeyReleaseTime = frames;
@@ -73,7 +68,6 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                 joysticks[joy].actualKey = BUTTON_START;
                 joysticks[joy].lastKeyPressTime = frames;
             }
-            // botão C solto
             else
             {
                 joysticks[joy].lastKeyReleaseTime = frames;
@@ -89,9 +83,9 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                     (joysticks[joy].lastArrowReleaseTime - joysticks[joy].lastArrowPressTime) < 30 &&
                     (frames - joysticks[joy].lastArrowReleaseTime) < 30)
                 {
-                    joysticks[joy].doubleArrow = TRUE;
+                    joysticks[joy].doubleArrowY = TRUE;
                 }
-                joysticks[joy].actualArrow = BUTTON_DOWN;
+                joysticks[joy].actualArrow |= BUTTON_DOWN;
                 joysticks[joy].lastArrowPressTime = frames;
             }
             else
@@ -99,7 +93,7 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                 joysticks[joy].lastArrowReleaseTime = frames;
                 joysticks[joy].actualArrow &= ~BUTTON_DOWN;
                 joysticks[joy].lastArrow = BUTTON_DOWN;
-                joysticks[joy].doubleArrow = FALSE;
+                joysticks[joy].doubleArrowY = FALSE;
             }
         }
         if (changed & BUTTON_UP)
@@ -110,9 +104,9 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                     (joysticks[joy].lastArrowReleaseTime - joysticks[joy].lastArrowPressTime)  < 30 &&
                     (frames - joysticks[joy].lastArrowReleaseTime) < 30)
                 {
-                    joysticks[joy].doubleArrow = TRUE;
+                    joysticks[joy].doubleArrowY = TRUE;
                 }
-                joysticks[joy].actualArrow = BUTTON_UP;
+                joysticks[joy].actualArrow |= BUTTON_UP;
                 joysticks[joy].lastArrowPressTime = frames;
             }
             else
@@ -120,7 +114,7 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                 joysticks[joy].lastArrowReleaseTime = frames;
                 joysticks[joy].actualArrow &= ~BUTTON_UP;
                 joysticks[joy].lastArrow = BUTTON_UP;
-                joysticks[joy].doubleArrow = FALSE;
+                joysticks[joy].doubleArrowY = FALSE;
             }
         }
 
@@ -132,9 +126,9 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                     (joysticks[joy].lastArrowReleaseTime - joysticks[joy].lastArrowPressTime)  < 30 &&
                     (frames - joysticks[joy].lastArrowReleaseTime) < 30)
                 {
-                    joysticks[joy].doubleArrow = TRUE;
+                    joysticks[joy].doubleArrowX = TRUE;
                 }
-                joysticks[joy].actualArrow = BUTTON_LEFT;
+                joysticks[joy].actualArrow |= BUTTON_LEFT;
                 joysticks[joy].lastArrowPressTime = frames;
             }
             else
@@ -142,7 +136,7 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                 joysticks[joy].lastArrowReleaseTime = frames;
                 joysticks[joy].actualArrow &= ~BUTTON_LEFT;
                 joysticks[joy].lastArrow = BUTTON_LEFT;
-                joysticks[joy].doubleArrow = FALSE;
+                joysticks[joy].doubleArrowX = FALSE;
             }
         }
         if (changed & BUTTON_RIGHT)
@@ -153,17 +147,17 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
                     (joysticks[joy].lastArrowReleaseTime - joysticks[joy].lastArrowPressTime)  < 30 &&
                     (frames - joysticks[joy].lastArrowReleaseTime) < 30)
                 {
-                    joysticks[joy].doubleArrow = TRUE;
+                    joysticks[joy].doubleArrowX = TRUE;
                 }
-                joysticks[joy].actualArrow = BUTTON_RIGHT;
+                joysticks[joy].actualArrow |= BUTTON_RIGHT;
                 joysticks[joy].lastArrowPressTime = frames;
             }
             else
             {
-                 joysticks[joy].lastArrowReleaseTime = frames;
-                 joysticks[joy].actualArrow &= ~BUTTON_RIGHT;
-                 joysticks[joy].lastArrow = BUTTON_RIGHT;
-                 joysticks[joy].doubleArrow = FALSE;
+                joysticks[joy].lastArrowReleaseTime = frames;
+                joysticks[joy].actualArrow &= ~BUTTON_RIGHT;
+                joysticks[joy].lastArrow = BUTTON_RIGHT;
+                joysticks[joy].doubleArrowX = FALSE;
             }
         }
         
