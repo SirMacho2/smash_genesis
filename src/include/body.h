@@ -19,7 +19,7 @@ typedef struct{
     u8  palID;          //Character palette ID
 }Body;
 
-void  Body_setSpeed(Body *c, f16 speedX, f16 speedY, f16 fragility);
+void Body_setSpeed(Body *c, f16 speedX, f16 speedY, f16 fragility);
 s16  Body_getPositionX(Body c);
 s16  Body_getPositionY(Body c);
 

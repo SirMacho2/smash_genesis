@@ -47,11 +47,31 @@ typedef enum{
 	WIN,
 	LOSE,
     NUMBER_OF_STATES,
+}CharSubState;
+
+typedef enum{
+	PASSIVE,
+	ATACK,
+	DAMAGE,
+	FINISH,
+	NUMBER_OF_STATES,
 }CharState;
 
+typedef struct
+{
+	CharState state;
+	CharSubState subState;
+	CharState nextState;
+	CharSubState nextSubstate;
+}State;
+
+
+
+
 typedef struct {
-	CharName  id;           //Identificacao numerica do personagem selecionado. Exemplo: Ryu=1; Ken=2; etc...
-	CharState state;        //state of character
+	CharName  id;           //Numeric indentifier of character
+	u8 playerNumber;		//Numeric indentifier of joystick position
+	State state;        	//state of character
 
     Body body;              // body of character
     Body spell;             // body of spell
