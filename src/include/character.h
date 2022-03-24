@@ -46,7 +46,7 @@ typedef enum{
 	GET_UP,
 	WIN,
 	LOSE,
-    NUMBER_OF_STATES,
+    NUMBER_OF_STATES1,
 }CharSubState;
 
 typedef enum{
@@ -54,7 +54,7 @@ typedef enum{
 	ATACK,
 	DAMAGE,
 	FINISH,
-	NUMBER_OF_STATES,
+	NUMBER_OF_STATES2,
 }CharState;
 
 typedef struct

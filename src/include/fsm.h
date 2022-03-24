@@ -1,8 +1,9 @@
 #ifndef __FSM__
 #define __FSM__
 
-#include "character.h"
 #include <genesis.h>
+#include "character.h"
+
 
 
 /**
