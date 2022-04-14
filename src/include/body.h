@@ -14,7 +14,7 @@ typedef struct{
     f16 positionY;      //position y axis 
     s16  axisX;          //pivot point X
 	s16  axisY;          //pivot point Y
-    s8  direction;      // -1 or 1
+    s8  direction;      // -1 for right or 1 for left
     BoxCollision box;   // body box
     u8  palID;          //Character palette ID
 }Body;

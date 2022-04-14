@@ -12,6 +12,6 @@
  *  \param Characters
  *      Character to update state;
  */
-void Fsm(Character c);
+void Fsm_char(Character c);
 
 #endif

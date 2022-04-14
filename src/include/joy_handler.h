@@ -6,6 +6,14 @@
 #include <joy.h>
 #include "world.h"
 
+
+typedef struct 
+{
+    u16 atackButton;
+    u16 defenceButton;
+    u16 specialButton;
+}JoyConfig;
+
 typedef struct 
 {
     u16 actualArrow;                //actual arrow key pressed
@@ -17,10 +25,14 @@ typedef struct
     u16 actualKey;                  //actual key pressed 
     u16 lastKeyPressTime;           //time when key was pressed
     u16 lastKeyReleaseTime;         //time when key was released
+    JoyConfig config;               // map buttons on actions
 }JoyHandler;
+
+
+
 
 void joyinit();
 void joyHandlerCallback(u16 joy, u16 changed, u16 state);
-
+void joySetting(u16 joy, JoyConfig config);
 
 #endif

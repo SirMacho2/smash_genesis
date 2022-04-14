@@ -15,6 +15,9 @@ void joyinit()
         joysticks[i].lastArrowReleaseTime = 0;
         joysticks[i].doubleArrowX = 0;
         joysticks[i].doubleArrowY = 0;
+        joysticks[i].config.atackButton = BUTTON_A;
+        joysticks[i].config.defenceButton = BUTTON_B;
+        joysticks[i].config.specialButton = BUTTON_C;
     }
 }
 
@@ -162,4 +165,8 @@ void joyHandlerCallback(u16 joy, u16 changed, u16 state)
         }
         
 	}
+}
+
+void joySetting(u16 joy, JoyConfig config){
+    joysticks[joy].config = config;
 }

@@ -8,7 +8,7 @@
 
 
 
-Character c, c2;
+Character c, c2, c3;
 Sprite *p, *p2;
 
 TileMap map1;
@@ -49,7 +49,7 @@ void moveSprite( Character *c)
     x = Body_getPositionX(c->body);
     y = Body_getPositionY(c->body);
 
-    if (x > 0 && y > 0 &&  c->body.speedY > FIX16(-1))
+    if (c->state.state >= WALKING && c->state.state <=FALLING_JUMP)
     {
         stop = FALSE;
         
@@ -159,6 +159,7 @@ int main()
     c.body.axisX = 0;
     c.body.axisY = -8;
     c.body.direction = 1;
+    c.state.state = FALLING_JUMP;
 
    
 
@@ -172,9 +173,11 @@ int main()
     p = SPR_addSprite(&Point, Body_getPositionX(c.body)-4, Body_getPositionY(c.body)+4, TILE_ATTR(PAL0, FALSE, FALSE, FALSE));
     SPR_setDepth(p, SPR_MIN_DEPTH);
 
-    c2.body.sprite = SPR_addSprite(&Arale,  40 , fix16ToInt(GROUND), TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
-    PAL_setPalette(PAL2, Arale.palette->data, DMA);
+    c2.body.sprite = SPR_addSprite(&Ristar,  100 , 123, TILE_ATTR(PAL2, FALSE, FALSE, FALSE));
+    PAL_setPalette(PAL2, Ristar.palette->data, DMA);
 
+    c3.body.sprite = SPR_addSprite(&Kid,  140 , 118, TILE_ATTR(PAL1, FALSE, FALSE, FALSE));
+    PAL_setPalette(PAL1, Kid.palette->data, DMA);
 
     // Atack_interaction(&c.body, c.atack, c.fragility);
     SPR_setAnim(c.body.sprite,7);
@@ -217,11 +220,13 @@ int main()
             {
                 c.body.speedX = FIX16(3.0);
                 SPR_setAnim(c.body.sprite,3);
+                c.state.state = RUNING;
             }
             else
             {
                 c.body.speedX = FIX16(1.0);
                 SPR_setAnim(c.body.sprite,2);
+                c.state.state = WALKING;
             }
             c.body.direction = 1;
             SPR_setHFlip(c.body.sprite, FALSE);
@@ -234,11 +239,13 @@ int main()
             {
                 c.body.speedX = FIX16(-3.0);
                 SPR_setAnim(c.body.sprite,3);
+                c.state.state = RUNING;
             }
             else
             {
                 c.body.speedX = FIX16(-1.0);
                 SPR_setAnim(c.body.sprite,2);
+                c.state.state = WALKING;
             }
             c.body.direction = -1;
             SPR_setHFlip(c.body.sprite, TRUE);
@@ -246,6 +253,7 @@ int main()
         if(joysticks[0].actualArrow &  BUTTON_UP)
         {
             SPR_setAnim(c.body.sprite,7);
+            c.state.state = JUMPING;
             if(joysticks[0].doubleArrowY == TRUE)
             {
                 c.body.speedY = FIX16(-3.0);
@@ -259,6 +267,7 @@ int main()
         else if(joysticks[0].actualArrow &  BUTTON_DOWN)
         {
             SPR_setAnim(c.body.sprite,7);
+            c.state.state = JUMPING_DOWN;
             if(joysticks[0].doubleArrowY == TRUE)
             {
                 c.body.speedY = FIX16(3.0);
